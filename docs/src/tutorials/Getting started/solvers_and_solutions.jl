@@ -53,8 +53,8 @@
 
 # ## Constructing a model
 
-# JuMP models can be created in three different modes: `AUTOMATIC`, `MANUAL` and
-# `DIRECT`. We'll use the following LP to illustrate them.
+# JuMP models can be created in two different modes: `AUTOMATIC` and `DIRECT`.
+# We'll use the following LP to illustrate them.
 
 # ```math
 # \begin{aligned}
@@ -96,26 +96,6 @@ model_auto_no = Model()
 set_optimizer(model_auto_no, GLPK.Optimizer)
 optimize!(model_auto_no)
 objective_value(model_auto_no)
-
-# Note that we can also enforce the automatic mode by passing
-# `caching_mode = MOIU.AUTOMATIC` in the Model function call.
-
-# ### `MANUAL` Mode
-
-# This mode is similar to the `AUTOMATIC` mode, but there are less protections
-# from the user getting errors from the solver API. On the other side, nothing
-# happens silently, which might give the user more control. It requires
-# attaching the solver before the solve step using the `MOIU.attach_optimizer()`
-# function.
-
-model_manual = Model(GLPK.Optimizer, caching_mode = MOIU.MANUAL)
-@variable(model_manual, 0 <= x <= 1)
-@variable(model_manual, 0 <= y <= 1)
-@constraint(model_manual, x + y <= 1)
-@objective(model_manual, Max, x + 2y)
-MOIU.attach_optimizer(model_manual)
-optimize!(model_manual)
-objective_value(model_manual)
 
 # ### `DIRECT` Mode
 

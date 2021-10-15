@@ -24,6 +24,9 @@ const _MOI_INFO_MSG = """
 # Markdown. _Never_ set it in production.
 const _FAST = findfirst(isequal("--fast"), ARGS) !== nothing
 
+# Pass --fix to run with `doctests=:fix`.
+const _FIX = findfirst(isequal("--fix"), ARGS) !== nothing
+
 const _TUTORIAL_DIR = joinpath(@__DIR__, "src", "tutorials")
 const _TUTORIAL_SUBDIR = [
     "Getting started",
@@ -202,7 +205,7 @@ makedocs(
     # checkdocs = :exports,
     # ==========================================================================
     # Skip doctests if --fast provided.
-    doctest = !_FAST,
+    doctest = _FIX ? :fix : !_FAST,
     pages = _PAGES,
 )
 
